@@ -1,0 +1,1 @@
+{"run_id": "df9b62df", "name": "smoke_test", "status": "completed", "started": "2026-06-03T17:08:17.126395+00:00", "ended": "2026-06-03T17:08:17.126408+00:00", "duration_s": 1.3e-05, "params": {"alpha": "alpha_001", "tc_bps": 10}, "metrics": {"sharpe": 1.23, "icir": 0.45}, "tags": {"phase": "smoke_test"}}

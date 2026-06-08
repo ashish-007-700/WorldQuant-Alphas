@@ -1,0 +1,20 @@
+data:
+  input_path: data/india_equities.csv
+  date_column: date
+  symbol_column: symbol
+  required_columns: [open, high, low, close, volume]
+  optional_columns: [vwap, returns, sector, market_cap]
+
+backtest:
+  long_quantile: 0.90
+  short_quantile: 0.10
+  holding_period_days: 1
+  transaction_cost_bps: 10
+
+risk:
+  market_return_column: market_return
+  sector_column: sector
+  beta_lookback: 252
+
+reporting:
+  annualization: 252

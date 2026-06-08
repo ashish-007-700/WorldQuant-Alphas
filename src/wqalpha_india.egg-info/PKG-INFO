@@ -1,0 +1,67 @@
+Metadata-Version: 2.4
+Name: wqalpha-india
+Version: 0.1.0
+Summary: Production-style research framework for WorldQuant 101 Formulaic Alphas on Indian equities.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24
+Requires-Dist: pandas>=2.0
+Requires-Dist: scipy>=1.10
+Requires-Dist: scikit-learn>=1.3
+Requires-Dist: statsmodels>=0.14
+Requires-Dist: matplotlib>=3.7
+Requires-Dist: seaborn>=0.12
+Requires-Dist: plotly>=5.18
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: pytest-cov>=4.1; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+
+# WQ Alpha India
+
+A production-style Python research framework for implementing and validating the 101 Formulaic Alphas on Indian equity market data.
+
+The framework assumes daily OHLCV data in long format with a `MultiIndex` of `date, symbol`.
+Required columns are `open`, `high`, `low`, `close`, `volume`; optional columns include
+`vwap`, `returns`, `sector`, `market_cap`, and risk-factor columns.
+
+## Architecture
+
+- `wqalpha.data`: Indian equity data loading, schema validation, return/VWAP enrichment.
+- `wqalpha.features`: reusable market feature engineering.
+- `wqalpha.operators`: vectorized cross-sectional and time-series alpha operators.
+- `wqalpha.registry`: alpha metadata, registration, batch execution.
+- `wqalpha.alphas`: 101 independent alpha callables.
+- `wqalpha.metrics`: IC, ICIR, hit ratio, alpha decay, turnover.
+- `wqalpha.backtest`: equal-weight long-short portfolio construction and performance.
+- `wqalpha.risk`: CAPM, Fama-French 3/5, sector and beta neutralization.
+- `wqalpha.visualization`: publication-quality research charts.
+
+## Quick Start
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
+
+```python
+from wqalpha.data import DataLoader
+from wqalpha.alphas import register_all_alphas
+from wqalpha.registry import AlphaRegistry
+
+panel = DataLoader.from_csv("data/india_equities.csv").load()
+registry = AlphaRegistry()
+register_all_alphas(registry)
+alpha_001 = registry.compute("alpha_001", panel)
+```
+
+## Data Contract
+
+Input rows should contain:
+
+```text
+date,symbol,open,high,low,close,volume,vwap,sector,market_cap
+```
+
+Dates are converted to timezone-naive pandas timestamps and sorted as `(date, symbol)`.
